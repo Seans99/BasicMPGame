@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,32 +10,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _MainMenu;
     [SerializeField] GameObject _PauseMenu;
 
-    bool bInGame = false;
-    bool bPaused = false;
-
-    private void Update()
-    {
-        if (bInGame && Input.GetKeyDown(KeyCode.Escape) && !bPaused)
-        {
-            _PauseMenu.SetActive(true);
-        }
-
-        if (bInGame && Input.GetKeyDown(KeyCode.Escape) && bPaused)
-        {
-            _PauseMenu.SetActive(false);
-        }
-    }
+    [Header("Network")]
+    [SerializeField] NetworkManager _NetworkManager;
 
     public void HostGame()
     {
         _MainMenu.SetActive(false);
-        bInGame = true;
+        _PauseMenu.SetActive(true);
+        _NetworkManager.StartHost();
     }
 
     public void JoinGame()
     {
         _MainMenu.SetActive(false);
-        bInGame = true;
+        _NetworkManager.StartClient();
     }
 
     public void QuitGame()
