@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Menu's")]
     [SerializeField] GameObject _MainMenu;
-    [SerializeField] GameObject _PauseMenu;
+    [SerializeField] GameObject _HUD;
 
     [Header("Network")]
     [SerializeField] NetworkManager _NetworkManager;
@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     public void HostGame()
     {
         _MainMenu.SetActive(false);
-        _PauseMenu.SetActive(true);
+        _HUD.SetActive(true);
         _NetworkManager.StartHost();
     }
 

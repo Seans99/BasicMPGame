@@ -9,25 +9,26 @@ public class Player : NetworkBehaviour
     [Header("Player settings")]
     public float _moveSpeed = 5f;
     public float _rotationSpeed = 10f;
+    public float _maxHealth = 3f;
 
     [Header("Prefabs")]
     [SerializeField] GameObject _laser;
 
-    NetworkVariable<Vector2> _moveInput = new NetworkVariable<Vector2>(writePerm: NetworkVariableWritePermission.Owner);
+    NetworkVariable<Vector2> _moveInput = new NetworkVariable<Vector2>();
+    NetworkVariable<float> _health = new NetworkVariable<float>();
 
     private Rigidbody2D _rb;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+
+        _health.Value = _maxHealth;
     }
 
     void FixedUpdate()
     {
-        if (IsServer)
-        {
-            _rb.MovePosition(_rb.position + _moveInput.Value * _moveSpeed * Time.fixedDeltaTime);
-        }
+        _rb.MovePosition(_rb.position + _moveInput.Value * _moveSpeed * Time.fixedDeltaTime);
 
         // Rotate player
         if (_moveInput.Value != Vector2.zero)
@@ -41,30 +42,46 @@ public class Player : NetworkBehaviour
 
     void OnMove(InputValue value)
     {
-        MoveRPC(value.Get<Vector2>());
+        if (IsLocalPlayer)
+        {
+            MoveRPC(value.Get<Vector2>());
+        }
     }
 
     void OnFire()
     {
-        FireRPC();
+        if (IsLocalPlayer)
+        {
+            FireRPC();
+        }
     }
 
     [Rpc(SendTo.Server)]
     private void MoveRPC(Vector2 value)
     {
-        if (IsLocalPlayer)
-        {
-            _moveInput.Value = value;
-        }
+        _moveInput.Value = value;
     }
 
     [Rpc(SendTo.Server)]
     private void FireRPC()
     {
-        if (IsLocalPlayer && IsServer)
+        NetworkObject obj = Instantiate(_laser, transform.position, transform.rotation).GetComponent<NetworkObject>();
+        obj.Spawn();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision detected");
+
+        if (IsServer && collision.gameObject.tag == "Laser")
         {
-            NetworkObject obj = Instantiate(_laser, transform.position, transform.rotation).GetComponent<NetworkObject>();
-            obj.Spawn();
+            NetworkBehaviour.Destroy(collision.gameObject);
+            _health.Value -= 1f;
+
+            if (_health.Value <= 0)
+            {
+                Debug.Log("You Died");
+            }
         }
     }
 }
