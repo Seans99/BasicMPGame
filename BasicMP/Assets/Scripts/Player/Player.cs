@@ -14,6 +14,9 @@ public class Player : NetworkBehaviour
     [Header("Prefabs")]
     [SerializeField] GameObject _laser;
 
+    [Header("Ships")]
+    [SerializeField] Sprite[] _ships;
+
     NetworkVariable<Vector2> _moveInput = new NetworkVariable<Vector2>();
     NetworkVariable<float> _health = new NetworkVariable<float>();
 
@@ -24,6 +27,18 @@ public class Player : NetworkBehaviour
         _rb = GetComponent<Rigidbody2D>();
 
         _health.Value = _maxHealth;
+
+        if (_ships.Length != 0)
+        {
+            if (NetworkObject.OwnerClientId == 0)
+            {
+                GetComponent<SpriteRenderer>().sprite = _ships[0];
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().sprite = _ships[1];
+            }
+        }
     }
 
     void FixedUpdate()
@@ -65,22 +80,20 @@ public class Player : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void FireRPC()
     {
-        NetworkObject obj = Instantiate(_laser, transform.position, transform.rotation).GetComponent<NetworkObject>();
+        Vector3 laserSpawnPosition = transform.position + transform.up;
+        NetworkObject obj = Instantiate(_laser, laserSpawnPosition, transform.rotation).GetComponent<NetworkObject>();
         obj.Spawn();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision detected");
-
         if (IsServer && collision.gameObject.tag == "Laser")
         {
-            NetworkBehaviour.Destroy(collision.gameObject);
             _health.Value -= 1f;
 
             if (_health.Value <= 0)
             {
-                Debug.Log("You Died");
+                NetworkObject.Despawn(gameObject);
             }
         }
     }

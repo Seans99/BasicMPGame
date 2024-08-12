@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 7286057479452147648}
   - component: {fileID: 1943644765982927854}
   - component: {fileID: 3440509377307770705}
-  - component: {fileID: 8297116748137317865}
-  - component: {fileID: 86402084545182162}
+  - component: {fileID: 1646294168500920082}
+  - component: {fileID: 7044356877867810622}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Laser
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4274619449
+  GlobalObjectIdHash: 600780603
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -191,7 +191,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!50 &8297116748137317865
+--- !u!50 &1646294168500920082
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -199,9 +199,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4877751831701336464}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -216,9 +216,9 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &86402084545182162
+--- !u!114 &7044356877867810622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

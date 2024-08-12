@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 972099393033145288}
   - component: {fileID: 514234168607114817}
   - component: {fileID: 1883684688673231491}
+  - component: {fileID: 6191755238030011344}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -103,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3526208466
+  GlobalObjectIdHash: 2368897770
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -141,7 +142,7 @@ MonoBehaviour:
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
   InLocalSpace: 0
-  Interpolate: 1
+  Interpolate: 0
   SlerpPosition: 0
 --- !u!114 &8138397404594087327
 MonoBehaviour:
@@ -189,6 +190,9 @@ MonoBehaviour:
   _rotationSpeed: 10
   _maxHealth: 3
   _laser: {fileID: 4877751831701336464, guid: b8ed068c9ed88cc4089e0202307f8a3a, type: 3}
+  _ships:
+  - {fileID: 21300000, guid: d19bbac3b4316fd4e8b5dc984ad4f069, type: 3}
+  - {fileID: 21300000, guid: a6db69f26ca65b749b6700f21d7a779d, type: 3}
 --- !u!50 &972099393033145288
 Rigidbody2D:
   serializedVersion: 4
@@ -197,9 +201,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7689388189305272337}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -273,3 +277,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.99, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &6191755238030011344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7689388189305272337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b7b522430821824fbb6f4d6a4b680fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ChatBox: {fileID: 0}

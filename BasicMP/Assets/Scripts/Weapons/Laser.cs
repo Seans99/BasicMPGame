@@ -9,10 +9,16 @@ public class Laser : NetworkBehaviour
     [SerializeField] private float _speed = 12f;
     [SerializeField] private float _timeUntilDestroy = 3f;
 
+    private Rigidbody2D _rb;
+
+    private void Start()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+        _rb.velocity = transform.up * _speed;
+    }
+
     void Update()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
-
         if (IsServer)
         {
             _timeUntilDestroy -= Time.deltaTime;
@@ -26,6 +32,14 @@ public class Laser : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void DestroyObjectRPC()
     {
-        NetworkBehaviour.Destroy(gameObject);
+        NetworkObject.Despawn(gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            NetworkObject.Despawn(gameObject);
+        }
     }
 }
