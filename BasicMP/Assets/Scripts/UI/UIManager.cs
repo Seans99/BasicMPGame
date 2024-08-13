@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
     [Header("Menu's")]
     [SerializeField] GameObject _MainMenu;
@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public void JoinGame()
     {
         _MainMenu.SetActive(false);
+        _HUD.SetActive(true);
         _NetworkManager.StartClient();
     }
 

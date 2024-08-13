@@ -289,4 +289,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b7b522430821824fbb6f4d6a4b680fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ChatBox: {fileID: 0}

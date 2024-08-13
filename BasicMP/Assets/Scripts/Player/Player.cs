@@ -26,8 +26,13 @@ public class Player : NetworkBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
 
-        _health.Value = _maxHealth;
+        // Set health to max health
+        if (IsServer)
+        {
+            _health.Value = _maxHealth;
+        }
 
+        // Change ship depending on p1 or p2
         if (_ships.Length != 0)
         {
             if (NetworkObject.OwnerClientId == 0)
@@ -43,6 +48,7 @@ public class Player : NetworkBehaviour
 
     void FixedUpdate()
     {
+        // Move player
         _rb.MovePosition(_rb.position + _moveInput.Value * _moveSpeed * Time.fixedDeltaTime);
 
         // Rotate player
@@ -80,6 +86,7 @@ public class Player : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void FireRPC()
     {
+        // Spawn laser bullet
         Vector3 laserSpawnPosition = transform.position + transform.up;
         NetworkObject obj = Instantiate(_laser, laserSpawnPosition, transform.rotation).GetComponent<NetworkObject>();
         obj.Spawn();
@@ -87,6 +94,7 @@ public class Player : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Reduce health if hit by laser
         if (IsServer && collision.gameObject.tag == "Laser")
         {
             _health.Value -= 1f;

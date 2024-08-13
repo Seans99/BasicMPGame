@@ -14,11 +14,14 @@ public class Laser : NetworkBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+
+        // Continues movement 
         _rb.velocity = transform.up * _speed;
     }
 
     void Update()
     {
+        // Despawn after a period of time
         if (IsServer)
         {
             _timeUntilDestroy -= Time.deltaTime;
@@ -37,7 +40,8 @@ public class Laser : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        // Despawn if hit on player
+        if (collision.gameObject.tag == "Player" && IsServer)
         {
             NetworkObject.Despawn(gameObject);
         }

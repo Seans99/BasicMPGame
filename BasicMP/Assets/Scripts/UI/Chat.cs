@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Chat : MonoBehaviour
+public class Chat : NetworkBehaviour
 {
     private TextMeshProUGUI _ChatBox;
 
@@ -17,37 +17,46 @@ public class Chat : MonoBehaviour
 
     void OnMsgOne(InputValue value)
     {
-        FixedString128Bytes message = new("Hello");
-        SubmitMessageRPC(message);
+        SendChatMessage("Hello");
     }
 
     void OnMsgTwo(InputValue value)
     {
-        FixedString128Bytes message = new("Bye");
-        SubmitMessageRPC(message);
+        SendChatMessage("Bye");
     }
 
     void OnMsgThree(InputValue value)
     {
-        FixedString128Bytes message = new("Haha");
-        SubmitMessageRPC(message);
+        SendChatMessage("Haha");
     }
 
     void OnMsgFour(InputValue value)
     {
-        FixedString128Bytes message = new("Well done");
-        SubmitMessageRPC(message);
+        SendChatMessage("Well done");
+    }
+
+    private void SendChatMessage(string message)
+    {
+        if (IsOwner)
+        {
+            FixedString128Bytes fixedMessage = new(message);
+            SubmitMessageRPC(fixedMessage, OwnerClientId);
+        }
     }
 
     [Rpc(SendTo.Server)]
-    public void SubmitMessageRPC(FixedString128Bytes message)
+    void SubmitMessageRPC(FixedString128Bytes message, ulong senderClientId)
     {
-        UpdateMessageRPC(message);
+        UpdateMessageClientRPC(message, senderClientId);
     }
 
-    [Rpc(SendTo.Server)]
-    public void UpdateMessageRPC(FixedString128Bytes message)
+    [ClientRpc]
+    void UpdateMessageClientRPC(FixedString128Bytes message, ulong senderClientId)
     {
-        _ChatBox.text = message.ToString();
+        if (_ChatBox != null)
+        {
+            string prefix = senderClientId == 0 ? "P1: " : $"P2: ";
+            _ChatBox.text = prefix + message.ToString();
+        }
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Laser
   - ChatBox
+  - EndGameUI
   layers:
   - Default
   - TransparentFX
